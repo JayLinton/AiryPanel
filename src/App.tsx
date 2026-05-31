@@ -3,9 +3,12 @@ import { AppProvider, useApp } from '@/contexts/AppContext';
 import Sidebar from '@/components/Sidebar';
 import Editor from '@/components/Editor';
 import StatusBar from '@/components/StatusBar';
+import AuthPage from '@/components/AuthPage';
+import { getToken, authAPI, type User } from '@/api/client';
 
 // 懒加载非关键组件
 const ShortcutPanel = lazy(() => import('@/components/ShortcutPanel'));
+const AdminPage = lazy(() => import('@/components/AdminPage'));
 
 function AppContent() {
   const { dispatch, createDocument } = useApp();
@@ -109,8 +112,61 @@ function AppContent() {
 }
 
 export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [checking, setChecking] = useState(true);
+
+  // 检查是否是管理后台路径
+  const isAdminPath = window.location.pathname === '/admin';
+
+  // 检查登录状态
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      setChecking(false);
+      return;
+    }
+
+    authAPI.getMe()
+      .then(u => setUser(u))
+      .catch(() => {
+        // Token 无效
+      })
+      .finally(() => setChecking(false));
+  }, []);
+
+  // 加载中
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--page-bg)' }}>
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-sm text-text-muted">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 管理后台
+  if (isAdminPath) {
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="w-8 h-8 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin" />
+        </div>
+      }>
+        <AdminPage />
+      </Suspense>
+    );
+  }
+
+  // 未登录
+  if (!user) {
+    return <AuthPage onLogin={(u) => setUser(u)} />;
+  }
+
+  // 已登录
   return (
-    <AppProvider>
+    <AppProvider user={user}>
       <AppContent />
     </AppProvider>
   );

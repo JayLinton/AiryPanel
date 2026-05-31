@@ -1,0 +1,181 @@
+{
+  "users": [
+    {
+      "id": "b54cc6f6-89b2-4f28-9127-192f106b9d7d",
+      "username": "test",
+      "email": "test@test.com",
+      "passwordHash": "$2b$10$oV5M4R8C6Spf/ik3h2Pya.v5XR1Fyubm/l1Hmbh8wVrNsO/Qa5WSe",
+      "createdAt": "2026-05-31T08:16:52.138Z"
+    },
+    {
+      "id": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "username": "trees",
+      "email": "1063750098@qq.com",
+      "passwordHash": "$2b$10$IMW7C9no9.Zdl01vpWBpMuI9bPJLZ93ailL/zz7GKTInZ.isCvaWy",
+      "createdAt": "2026-05-31T08:43:20.605Z"
+    },
+    {
+      "id": "d0eb4cdf-f199-406f-a441-0cc779409201",
+      "username": "水电费多福多寿",
+      "email": "10630098@qq.com",
+      "passwordHash": "$2b$10$QflbpJepMKOKkiQ73MTU2eBJN9Gg5mswp/GJ.XAGTCpVAbYe4Szp2",
+      "createdAt": "2026-05-31T09:09:51.249Z"
+    }
+  ],
+  "notes": [
+    {
+      "id": "4f200ca0-2744-4834-b0a7-b17e53829ca4",
+      "userId": "b54cc6f6-89b2-4f28-9127-192f106b9d7d",
+      "title": "���Աʼ�",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Hello World\"}]}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:17:01.334Z",
+      "updatedAt": "2026-05-31T08:17:01.334Z"
+    },
+    {
+      "id": "5bda45f4-ffa9-432b-b6bf-7eb708354699",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "欢迎使用 Inkflow",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"欢迎使用 Inkflow\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Inkflow 是一款优雅的云端笔记应用，专注于纯粹的写作体验。\"}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"快速开始\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"点击左侧「新建笔记」创建新文档\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"输入 / 打开命令菜单，快速插入格式\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"使用 [[文档标题]] 创建双链引用\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"支持 Markdown 快捷输入\"}]}]}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"快捷键\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + N：新建笔记\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + S：保存\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + B：切换侧边栏\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + /：查看所有快捷键\"}]}]}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"功能特性\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"富文本编辑：标题、列表、代码块、图片等\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"笔记模板：日记、会议记录、待办清单等\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"双链引用：使用 [[标题]] 关联笔记\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"专注模式：全屏无干扰写作\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"深色模式：保护你的眼睛\"}]}]}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"开始你的写作之旅吧！\"}]}]}",
+      "icon": "👋",
+      "tags": [
+        "入门指南"
+      ],
+      "isFavorite": true,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:43:20.605Z",
+      "updatedAt": "2026-05-31T08:43:20.605Z"
+    },
+    {
+      "id": "a9c76f61-fcc8-48c8-93a8-464feaf5ec1e",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": "2026-05-31T08:48:59.057Z",
+      "createdAt": "2026-05-31T08:45:15.845Z",
+      "updatedAt": "2026-05-31T08:48:59.063Z"
+    },
+    {
+      "id": "8cb78911-3622-444b-9ef2-fce1c9afb8fb",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:17.071Z",
+      "updatedAt": "2026-05-31T08:45:17.078Z"
+    },
+    {
+      "id": "83daf375-0eca-41da-946b-756058c14e52",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": "2026-05-31T08:49:00.729Z",
+      "createdAt": "2026-05-31T08:45:18.412Z",
+      "updatedAt": "2026-05-31T08:49:00.732Z"
+    },
+    {
+      "id": "f5e2aedf-677a-487f-83fb-5ada1fbe13f3",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": "2026-05-31T08:49:02.571Z",
+      "createdAt": "2026-05-31T08:45:19.864Z",
+      "updatedAt": "2026-05-31T08:49:02.574Z"
+    },
+    {
+      "id": "b9857c2a-5d3f-456a-baad-447810a1a4f9",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:21.199Z",
+      "updatedAt": "2026-05-31T08:45:21.207Z"
+    },
+    {
+      "id": "0753b5d1-e217-48cf-ae94-87e9b0cc8c04",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:22.513Z",
+      "updatedAt": "2026-05-31T08:45:22.524Z"
+    },
+    {
+      "id": "028d6e3d-081c-4328-9206-667d106d2511",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "未命名笔记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:24.380Z",
+      "updatedAt": "2026-05-31T08:45:24.387Z"
+    },
+    {
+      "id": "8571b489-a841-4b0b-b1a2-7f953ad23ca6",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "日记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"日记标题\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"日期：\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"天气：\"}]},{\"type\":\"horizontalRule\"},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"今日感悟\"}]},{\"type\":\"paragraph\"},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"明日计划\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划1\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划2\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划3\"}]}]}]}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": false,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:25.500Z",
+      "updatedAt": "2026-05-31T08:45:25.506Z"
+    },
+    {
+      "id": "a148e21c-aa1a-45c3-8a79-c820b04a0a10",
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "title": "日记",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"marks\":[{\"type\":\"textStyle\",\"attrs\":{\"color\":\"#6b7280\"}}],\"text\":\"日记标\"},{\"type\":\"text\",\"text\":\"题\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"日期：\"}]},{\"type\":\"blockquote\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"天气：\"}]}]},{\"type\":\"horizontalRule\"},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"marks\":[{\"type\":\"code\"}],\"text\":\"今日感悟\"}]},{\"type\":\"paragraph\"},{\"type\":\"heading\",\"attrs\":{\"level\":3},\"content\":[{\"type\":\"text\",\"text\":\"明日计划\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\"}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划1\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划2\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"计划3\"}]}]}]}]}",
+      "icon": "",
+      "tags": [],
+      "isFavorite": true,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T08:45:26.687Z",
+      "updatedAt": "2026-05-31T08:59:07.789Z"
+    },
+    {
+      "id": "a437fe4f-b001-4f73-806e-8507441681e0",
+      "userId": "d0eb4cdf-f199-406f-a441-0cc779409201",
+      "title": "欢迎使用 Inkflow",
+      "content": "{\"type\":\"doc\",\"content\":[{\"type\":\"heading\",\"attrs\":{\"level\":1},\"content\":[{\"type\":\"text\",\"text\":\"欢迎使用 Inkflow\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Inkflow 是一款优雅的云端笔记应用，专注于纯粹的写作体验。\"}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"快速开始\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"点击左侧「新建笔记」创建新文档\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"输入 / 打开命令菜单，快速插入格式\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"使用 [[文档标题]] 创建双链引用\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"支持 Markdown 快捷输入\"}]}]}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"快捷键\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + N：新建笔记\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + S：保存\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + B：切换侧边栏\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Ctrl/Cmd + /：查看所有快捷键\"}]}]}]},{\"type\":\"heading\",\"attrs\":{\"level\":2},\"content\":[{\"type\":\"text\",\"text\":\"功能特性\"}]},{\"type\":\"bulletList\",\"content\":[{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"富文本编辑：标题、列表、代码块、图片等\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"笔记模板：日记、会议记录、待办清单等\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"双链引用：使用 [[标题]] 关联笔记\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"专注模式：全屏无干扰写作\"}]}]},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"深色模式：保护你的眼睛\"}]}]}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"开始你的写作之旅吧！\"}]}]}",
+      "icon": "👋",
+      "tags": [
+        "入门指南"
+      ],
+      "isFavorite": true,
+      "deletedAt": null,
+      "createdAt": "2026-05-31T09:09:51.249Z",
+      "updatedAt": "2026-05-31T09:09:51.249Z"
+    }
+  ],
+  "settings": [
+    {
+      "userId": "6196d989-b450-4efb-8385-c569c2ba2c8c",
+      "theme": "light"
+    }
+  ]
+}

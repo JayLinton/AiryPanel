@@ -217,8 +217,8 @@ export default function BlockMenu({ editor }: BlockMenuProps) {
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute left-0 top-full mt-1 z-50 bg-page-bg border border-border rounded-xl shadow-xl p-3 animate-fade-in"
-          style={{ width: '280px' }}
+          className="absolute left-0 top-full mt-1 z-50 bg-page-bg border border-border rounded-xl shadow-xl p-2.5 animate-fade-in"
+          style={{ width: '260px' }}
           onMouseEnter={() => {
             if (hideTimeoutRef.current) {
               clearTimeout(hideTimeoutRef.current);
@@ -226,8 +226,8 @@ export default function BlockMenu({ editor }: BlockMenuProps) {
           }}
         >
           {menuSections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-3' : ''}>
-              <div className="text-[11px] font-medium text-text-muted mb-1.5 px-1">
+            <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-2' : ''}>
+              <div className="text-[11px] font-medium text-text-muted mb-1 px-1">
                 {section.title}
               </div>
               <div className="grid grid-cols-3 gap-1">

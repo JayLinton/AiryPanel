@@ -13,13 +13,12 @@ import {
   Trash,
   ChevronDown,
   Settings,
-  User,
   Info,
   BarChart3,
-  Download,
+  LogOut,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
-import { documentDB } from '@/db/database';
+import { notesAPI } from '@/api/client';
 import TagFilter from './TagFilter';
 import TemplatePicker from './TemplatePicker';
 import StatsPanel from './StatsPanel';
@@ -42,6 +41,7 @@ export default function Sidebar() {
     toggleFavorite,
     updateAccessTime,
     toggleTheme,
+    logout,
   } = useApp();
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -58,6 +58,11 @@ export default function Sidebar() {
   const [showTemplatePicker, setShowTemplatePicker] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [currentUser, setCurrentUser] = useState<{ id: string; username: string; email: string } | null>(null);
+  const [userAvatar, setUserAvatar] = useState('');
+  const avatarInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -68,10 +73,23 @@ export default function Sidebar() {
     function handleClickOutside(e: MouseEvent) {
       if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
         setShowSettings(false);
+        setEditingUsername(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // 获取当前用户信息
+  useEffect(() => {
+    import('@/api/client').then(({ authAPI }) => {
+      authAPI.getMe().then(user => {
+        setCurrentUser(user);
+        setNewUsername(user.username);
+        // 从服务器加载头像
+        setUserAvatar(user.avatar || '');
+      }).catch(() => {});
+    });
   }, []);
 
   // 编辑时自动聚焦
@@ -241,7 +259,7 @@ export default function Sidebar() {
     dispatch({ type: 'UPDATE_DOCUMENT', payload: { id, updates: { title } } });
     setEditingId(null);
     try {
-      await documentDB.update(id, { title, updatedAt: Date.now() });
+      await notesAPI.update(id, { title });
     } catch (error) {
       console.error('保存标题失败:', error);
     }
@@ -289,7 +307,7 @@ export default function Sidebar() {
         type: 'UPDATE_DOCUMENT',
         payload: { id: docId, updates: { content: template.content, title: template.name === '空白文档' ? '未命名笔记' : template.name } },
       });
-      await documentDB.update(docId, {
+      await notesAPI.update(docId, {
         content: template.content,
         title: template.name === '空白文档' ? '未命名笔记' : template.name,
       });
@@ -306,10 +324,16 @@ export default function Sidebar() {
   }
 
   // 格式化时间
-  function formatTime(timestamp: number): string {
+  function formatTime(timestamp: number | string): string {
+    if (!timestamp) return '';
+
     const date = new Date(timestamp);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
+
+    // 如果时间无效或在未来，返回空
+    if (isNaN(date.getTime()) || diff < 0) return '';
+
     const days = Math.floor(diff / 86400000);
 
     if (days === 0) {
@@ -492,15 +516,13 @@ export default function Sidebar() {
       <div className="px-4 pt-5 pb-3">
         {/* Logo/标题 */}
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 flex items-center justify-center">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4h16v2H4V4zm0 7h16v2H4v-2zm0 7h16v2H4v-2z" fill="currentColor" className="text-accent"/>
-                <circle cx="8" cy="8" r="2" fill="currentColor" className="text-accent"/>
-                <circle cx="16" cy="16" r="2" fill="currentColor" className="text-accent"/>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 flex items-center justify-center">
+              <svg width="28" height="28" viewBox="0 0 48 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" fill="currentColor" className="text-accent"/>
               </svg>
             </div>
-            <h1 className="text-sm font-semibold text-text-primary tracking-tight">Inkflow</h1>
+            <h1 className="text-lg font-semibold text-text-primary tracking-tight">Inkflow</h1>
           </div>
 
           {/* 设置按钮 */}
@@ -518,12 +540,87 @@ export default function Sidebar() {
                 {/* 用户信息 */}
                 <div className="px-4 py-3 border-b border-border">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-accent-light flex items-center justify-center">
-                      <User size={20} className="text-accent" />
+                    {/* 隐藏的文件上传 */}
+                    <input
+                      ref={avatarInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        // 限制文件大小 (2MB)
+                        if (file.size > 2 * 1024 * 1024) {
+                          alert('图片大小不能超过 2MB');
+                          return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = async () => {
+                          if (typeof reader.result === 'string') {
+                            try {
+                              const { authAPI } = await import('@/api/client');
+                              const result = await authAPI.updateAvatar(reader.result);
+                              setUserAvatar(result.avatar);
+                            } catch (error) {
+                              console.error('上传头像失败:', error);
+                              alert('上传头像失败，请重试');
+                            }
+                          }
+                        };
+                        reader.readAsDataURL(file);
+
+                        // 重置 input
+                        if (avatarInputRef.current) {
+                          avatarInputRef.current.value = '';
+                        }
+                      }}
+                    />
+
+                    <div
+                      className="w-10 h-10 rounded-full bg-accent-light flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-accent-ring transition-all overflow-hidden"
+                      onClick={() => avatarInputRef.current?.click()}
+                      title="点击上传头像"
+                    >
+                      {userAvatar ? (
+                        <img src={userAvatar} alt="头像" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-sm font-semibold text-accent">
+                          {currentUser?.username?.charAt(0)?.toUpperCase() || 'U'}
+                        </span>
+                      )}
                     </div>
-                    <div>
-                      <div className="text-sm font-medium text-text-primary">Inkflow 用户</div>
-                      <div className="text-xs text-text-muted">本地笔记</div>
+                    <div className="flex-1 min-w-0">
+                      {editingUsername ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="text"
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                            className="flex-1 text-sm bg-hover-bg border border-border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-accent-ring"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                setEditingUsername(false);
+                              }
+                              if (e.key === 'Escape') {
+                                setEditingUsername(false);
+                                setNewUsername(currentUser?.username || '');
+                              }
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className="text-sm font-medium text-text-primary cursor-pointer hover:text-accent transition-colors"
+                          onClick={() => setEditingUsername(true)}
+                          title="点击修改用户名"
+                        >
+                          {currentUser?.username || '用户'}
+                        </div>
+                      )}
+                      <div className="text-xs text-text-muted">{currentUser?.email || ''}</div>
                     </div>
                   </div>
                 </div>
@@ -552,16 +649,29 @@ export default function Sidebar() {
                   <span>数据统计</span>
                 </button>
 
-                {/* 安装应用 */}
+                {/* 帮助与反馈 */}
                 <button
                   onClick={() => {
                     setShowSettings(false);
-                    setShowInstallGuide(true);
+                    window.open('https://github.com/JayLinton/Inkflow', '_blank');
                   }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-hover-bg transition-colors duration-150"
                 >
-                  <Download size={16} />
-                  <span>安装应用</span>
+                  <Info size={16} />
+                  <span>帮助与反馈</span>
+                </button>
+
+                {/* 退出登录 */}
+                <div className="border-t border-border my-1" />
+                <button
+                  onClick={() => {
+                    setShowSettings(false);
+                    logout();
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150"
+                >
+                  <LogOut size={16} />
+                  <span>退出登录</span>
                 </button>
 
                 {/* 关于 */}
@@ -616,12 +726,28 @@ export default function Sidebar() {
               <span className="text-xs font-medium text-text-muted uppercase tracking-wider">
                 回收站
               </span>
-              <button
-                onClick={() => dispatch({ type: 'TOGGLE_TRASH' })}
-                className="text-xs text-accent hover:underline"
-              >
-                返回
-              </button>
+              <div className="flex items-center gap-2">
+                {filteredDocs.length > 0 && (
+                  <button
+                    onClick={async () => {
+                      if (confirm('确定要永久删除所有回收站中的笔记吗？此操作不可撤销。')) {
+                        for (const doc of filteredDocs) {
+                          await permanentDeleteDocument(doc.id);
+                        }
+                      }
+                    }}
+                    className="text-xs text-red-500 hover:text-red-600 transition-colors"
+                  >
+                    清空
+                  </button>
+                )}
+                <button
+                  onClick={() => dispatch({ type: 'TOGGLE_TRASH' })}
+                  className="text-xs text-accent hover:underline"
+                >
+                  返回
+                </button>
+              </div>
             </div>
             {filteredDocs.length === 0 ? (
               <div className="px-2 py-10 text-center">
@@ -734,13 +860,6 @@ export default function Sidebar() {
           回收站 {deletedDocs.length > 0 && `(${deletedDocs.length})`}
         </button>
 
-        <button
-          onClick={() => window.open('/website.html', '_blank')}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-text-muted hover:text-text-tertiary hover:bg-hover-bg rounded-lg transition-all duration-200"
-        >
-          <Download size={15} />
-          安装到本地
-        </button>
       </div>
 
       {/* 拖拽调整宽度条 */}

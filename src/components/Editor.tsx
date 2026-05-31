@@ -36,7 +36,7 @@ import {
   Focus,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
-import { documentDB } from '@/db/database';
+import { notesAPI } from '@/api/client';
 import TitleInput from './TitleInput';
 import DocToolbar from './DocToolbar';
 import TagInput from './TagInput';
@@ -106,7 +106,7 @@ export default function Editor() {
     [state.documents, state.currentDocId]
   );
 
-  // 保存内容到数据库
+  // 保存内容到服务器
   const saveContent = useCallback(
     async (content: string) => {
       if (!state.currentDocId) return;
@@ -117,10 +117,7 @@ export default function Editor() {
           payload: { id: state.currentDocId, updates: { content, updatedAt: Date.now() } },
         });
 
-        await documentDB.update(state.currentDocId, {
-          content,
-          updatedAt: Date.now(),
-        });
+        await notesAPI.update(state.currentDocId, { content });
       } catch (error) {
         console.error('保存内容失败:', error);
       }
@@ -627,6 +624,8 @@ export default function Editor() {
               <Focus size={14} />
               <span>专注</span>
             </button>
+
+            <div className="w-px h-5 bg-border mx-1" />
 
             {/* 导入导出 */}
             <DocToolbar editor={editor} />

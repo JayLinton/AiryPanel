@@ -1,6 +1,6 @@
 # Inkflow
 
-一个优雅的本地笔记应用，专注于纯粹的写作体验。
+一个优雅的云端笔记应用，专注于纯粹的写作体验。
 
 **🌐 在线体验：** https://inkflow-lemon.vercel.app
 
@@ -42,7 +42,7 @@
 - 写作字数趋势图
 - 文档数量统计
 - 标签分析
-- GitHub 风格贡献图
+- 创作日历（热力图）
 
 ### 🎯 专注模式
 - 全屏无干扰写作
@@ -53,21 +53,20 @@
 - 导出为 Markdown（带 frontmatter）
 - 导出为 HTML
 - 导入 Markdown 文件
-- 数据备份和恢复
+
+### ☁️ 云端同步
+- 用户注册/登录
+- 数据云端存储
+- 多设备同步
+- 后台管理系统
 
 ### 🎨 界面特性
 - 深色/浅色主题切换
 - 侧边栏可调整宽度
-- 封面图/渐变色
 - 状态栏（字数统计、保存状态）
 - 快捷键支持
 - 毛玻璃效果
-
-### 💾 数据安全
-- 本地存储（IndexedDB）
-- 自动保存
-- 内存降级方案
-- 错误提示和恢复建议
+- 用户头像上传
 
 ---
 
@@ -77,11 +76,6 @@
 
 直接访问 https://inkflow-lemon.vercel.app 即可使用。
 
-**安装到桌面：**
-1. 用 Chrome / Edge 打开链接
-2. 点击地址栏右侧的安装图标
-3. 点击"安装"
-
 ### 本地开发
 
 ```bash
@@ -89,10 +83,16 @@
 git clone https://github.com/JayLinton/Inkflow.git
 cd Inkflow
 
-# 安装依赖
+# 安装前端依赖
 npm install --legacy-peer-deps
 
-# 启动开发服务器
+# 安装后端依赖
+cd server && npm install --legacy-peer-deps && cd ..
+
+# 启动后端
+cd server && npm run dev &
+
+# 启动前端
 npm run dev
 ```
 
@@ -101,42 +101,34 @@ npm run dev
 ### 构建部署
 
 ```bash
-# 构建生产版本
+# 构建前端
 npm run build
 
-# 预览构建结果
-npm run preview
+# 部署到服务器
+# 参考 DEPLOYMENT.md
 ```
 
 ---
 
 ## 📦 部署方式
 
-### Vercel（推荐）
+### Vercel（前端）
 
 ```bash
 npm i -g vercel
 vercel --prod
 ```
 
-或访问 [vercel.com](https://vercel.com) 导入 GitHub 仓库。
-
-### Netlify
+### 自有服务器（完整版）
 
 ```bash
-npm run build
-# 拖拽 dist 文件夹到 netlify.com/drop
-```
+# 上传代码到服务器
+scp -r dist server root@your-ip:/var/www/inkflow/
 
-### GitHub Pages
-
-推送代码到 GitHub，在仓库 Settings → Pages 中启用。
-
-### Docker
-
-```bash
-docker build -t inkflow .
-docker run -p 3000:80 inkflow
+# 在服务器上执行
+cd /var/www/inkflow/server
+npm install
+pm2 start npx --name inkflow -- tsx src/index.ts
 ```
 
 详细部署文档请参考 [DEPLOYMENT.md](DEPLOYMENT.md)
@@ -165,43 +157,40 @@ docker run -p 3000:80 inkflow
 
 ## 🛠️ 技术栈
 
-- **前端框架**: [React 18](https://react.dev/)
-- **构建工具**: [Vite 6](https://vitejs.dev/)
-- **类型系统**: [TypeScript](https://www.typescriptlang.org/)
-- **富文本编辑器**: [TipTap](https://tiptap.dev/) (基于 ProseMirror)
-- **样式方案**: [Tailwind CSS 3](https://tailwindcss.com/)
-- **本地存储**: [Dexie](https://dexie.org/) (IndexedDB)
-- **图标库**: [Lucide React](https://lucide.dev/)
-- **数学公式**: [KaTeX](https://katex.org/)
+**前端：**
+- React 18 + TypeScript
+- Vite 6
+- TipTap（富文本编辑器）
+- Tailwind CSS 3
+- Lucide React（图标）
+- KaTeX（数学公式）
+
+**后端：**
+- Node.js + Express
+- lowdb（JSON 文件数据库）
+- JWT 认证
+- bcryptjs（密码加密）
 
 ---
 
 ## 📁 项目结构
 
 ```
-src/
-├── assets/            # 静态资源
-├── components/        # React 组件
-│   ├── Editor.tsx     # 主编辑器
-│   ├── Sidebar.tsx    # 侧边栏
-│   ├── BlockMenu.tsx  # 块操作菜单
-│   ├── FocusMode.tsx  # 专注模式
-│   ├── StatsPanel.tsx # 数据统计
-│   └── ...
-├── contexts/          # React Context
-│   └── AppContext.tsx # 应用状态管理
-├── data/              # 数据
-│   └── templates.ts   # 笔记模板
-├── db/                # 数据库
-│   └── database.ts   # Dexie 数据库配置
-├── extensions/        # TipTap 扩展
-│   ├── WikiLink.ts   # 双链扩展
-│   └── ImageResize.ts # 图片缩放扩展
-├── types/             # TypeScript 类型定义
-├── utils/             # 工具函数
-├── App.tsx            # 应用主组件
-├── main.tsx           # 入口文件
-└── index.css          # 全局样式
+├── src/                    # 前端源码
+│   ├── api/               # API 客户端
+│   ├── components/        # React 组件
+│   ├── contexts/          # 状态管理
+│   ├── data/              # 模板数据
+│   ├── extensions/        # TipTap 扩展
+│   └── utils/             # 工具函数
+├── server/                 # 后端源码
+│   ├── src/
+│   │   ├── routes/        # API 路由
+│   │   ├── middleware/    # 中间件
+│   │   └── db/            # 数据库
+│   └── data/              # 数据存储
+├── dist/                   # 前端构建产物
+└── public/                 # 静态资源
 ```
 
 ---
@@ -221,16 +210,6 @@ src/
 ## 📄 许可证
 
 本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
----
-
-## 🙏 致谢
-
-- [TipTap](https://tiptap.dev/) - 优秀的富文本编辑器框架
-- [Lucide](https://lucide.dev/) - 精美的图标库
-- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
-- [Vite](https://vitejs.dev/) - 下一代前端构建工具
-- [KaTeX](https://katex.org/) - 快速的数学公式渲染
 
 ---
 

@@ -79,9 +79,9 @@ export default function StatsPanel({ documents, onClose }: StatsPanelProps) {
       });
     }
 
-    // 贡献图数据（最近 52 周）
+    // 创作日历数据（最近 26 周）
     const contributionData: { date: string; count: number; level: number }[] = [];
-    for (let i = 364; i >= 0; i--) {
+    for (let i = 181; i >= 0; i--) {
       const date = new Date(now - i * 24 * 60 * 60 * 1000);
       const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
       const dayEnd = dayStart + 24 * 60 * 60 * 1000;
@@ -211,7 +211,7 @@ export default function StatsPanel({ documents, onClose }: StatsPanelProps) {
                 : 'text-text-muted border-transparent hover:text-text-secondary'
             }`}
           >
-            贡献图
+            创作日历
           </button>
         </div>
 
@@ -348,36 +348,36 @@ export default function StatsPanel({ documents, onClose }: StatsPanelProps) {
                 </div>
               </div>
 
-              {/* 贡献图 */}
+              {/* 创作日历 */}
               <div>
                 <h3 className="text-sm font-medium text-text-secondary mb-4">
-                  最近 52 周的写作活动
+                  最近 6 个月的写作活动
                 </h3>
                 <div className="overflow-x-auto pb-2">
-                  <div className="inline-flex flex-col gap-[3px]">
+                  <div className="inline-flex flex-col gap-[3px] w-full">
                     {/* 星期标签 */}
                     <div className="flex gap-[3px] text-[10px] text-text-muted">
-                      <div className="w-[14px]" />
+                      <div className="w-[18px]" />
                       {['一', '三', '五', '日'].map((day, i) => (
-                        <div key={day} className="w-[14px] h-[14px] flex items-center justify-center" style={{ marginLeft: i === 0 ? 0 : 28 }}>
+                        <div key={day} className="w-[18px] h-[18px] flex items-center justify-center" style={{ marginLeft: i === 0 ? 0 : 36 }}>
                           {day}
                         </div>
                       ))}
                     </div>
 
-                    {/* 贡献方块 */}
+                    {/* 创作方块 */}
                     {Array.from({ length: 7 }, (_, weekDay) => (
                       <div key={weekDay} className="flex gap-[3px]">
                         {/* 星期标签 */}
-                        <div className="w-[14px] h-[14px] flex items-center justify-center text-[10px] text-text-muted">
+                        <div className="w-[18px] h-[18px] flex items-center justify-center text-[10px] text-text-muted">
                           {weekDay === 0 ? '一' : weekDay === 2 ? '三' : weekDay === 4 ? '五' : weekDay === 6 ? '日' : ''}
                         </div>
 
                         {/* 方块 */}
-                        {Array.from({ length: 53 }, (_, week) => {
+                        {Array.from({ length: 26 }, (_, week) => {
                           const index = week * 7 + weekDay;
                           const day = stats.contributionData[index];
-                          if (!day) return <div key={week} className="w-[14px] h-[14px]" />;
+                          if (!day) return <div key={week} className="w-[18px] h-[18px]" />;
 
                           const bgColor = [
                             'bg-hover-bg',
@@ -390,7 +390,7 @@ export default function StatsPanel({ documents, onClose }: StatsPanelProps) {
                           return (
                             <div
                               key={week}
-                              className={`w-[14px] h-[14px] rounded-sm ${bgColor} transition-colors duration-150 cursor-pointer hover:ring-1 hover:ring-accent-ring group relative`}
+                              className={`w-[18px] h-[18px] rounded-sm ${bgColor} transition-colors duration-150 cursor-pointer hover:ring-1 hover:ring-accent-ring group relative`}
                               title={`${day.date}: ${day.count} 次活动`}
                             />
                           );
@@ -404,11 +404,11 @@ export default function StatsPanel({ documents, onClose }: StatsPanelProps) {
                 <div className="flex items-center gap-2 mt-4 text-xs text-text-muted">
                   <span>少</span>
                   <div className="flex gap-1">
-                    <div className="w-[14px] h-[14px] rounded-sm bg-hover-bg" />
-                    <div className="w-[14px] h-[14px] rounded-sm bg-accent/20" />
-                    <div className="w-[14px] h-[14px] rounded-sm bg-accent/40" />
-                    <div className="w-[14px] h-[14px] rounded-sm bg-accent/60" />
-                    <div className="w-[14px] h-[14px] rounded-sm bg-accent" />
+                    <div className="w-[18px] h-[18px] rounded-sm bg-hover-bg" />
+                    <div className="w-[18px] h-[18px] rounded-sm bg-accent/20" />
+                    <div className="w-[18px] h-[18px] rounded-sm bg-accent/40" />
+                    <div className="w-[18px] h-[18px] rounded-sm bg-accent/60" />
+                    <div className="w-[18px] h-[18px] rounded-sm bg-accent" />
                   </div>
                   <span>多</span>
                 </div>
