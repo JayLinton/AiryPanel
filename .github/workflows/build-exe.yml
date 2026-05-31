@@ -36,60 +36,46 @@ jobs:
           name: Inkflow-Windows
           path: release/*.exe
 
-  build-mac:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Build Web
-        run: npm run build
-
-      - name: Build Electron
-        run: npx electron-builder --mac --publish never
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Inkflow-macOS
-          path: release/*.dmg
-
-  build-linux:
+  create-release:
+    needs: build-windows
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          name: Inkflow-Windows
+          path: ./artifacts
 
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Inkflow ${{ github.ref_name }}
+          body: |
+            ## Inkflow ${{ github.ref_name }}
 
-      - name: Build Web
-        run: npm run build
+            优雅的本地笔记应用，专注于纯粹的写作体验。
 
-      - name: Build Electron
-        run: npx electron-builder --linux --publish never
+            ### 下载
+            - **Windows**: 下载 `Inkflow-Setup-${{ github.ref_name }}.exe` 安装包
+
+            ### 功能特性
+            - 富文本编辑器（TipTap）
+            - 笔记模板系统
+            - 双链引用
+            - 数学公式支持
+            - 专注模式
+            - 数据统计
+            - 本地存储，隐私至上
+
+            ### 在线体验
+            https://inkflow-lemon.vercel.app
+          files: ./artifacts/*
+          draft: false
+          prerelease: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Inkflow-Linux
-          path: release/*.AppImage
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
