@@ -1,20 +1,11 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-// 邮件配置
-// 使用 QQ 邮箱 SMTP（免费）
-// 需要在 QQ 邮箱设置中开启 SMTP 服务，获取授权码
-const EMAIL_CONFIG = {
-  host: process.env.SMTP_HOST || 'smtp.qq.com',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER || '', // 你的邮箱
-    pass: process.env.SMTP_PASS || '', // 授权码（不是密码）
-  },
-};
+// Resend 配置
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Inkflow <onboarding@resend.dev>';
 
-// 创建邮件传输器
-const transporter = nodemailer.createTransport(EMAIL_CONFIG);
+// 创建 Resend 实例
+const resend = new Resend(RESEND_API_KEY);
 
 // 验证码存储（内存，5分钟过期）
 const verificationCodes = new Map<string, { code: string; expires: number }>();
@@ -26,9 +17,9 @@ function generateCode(): string {
 
 // 发送验证码
 export async function sendVerificationCode(email: string): Promise<{ success: boolean; message: string }> {
-  // 检查邮件配置
-  if (!EMAIL_CONFIG.auth.user || !EMAIL_CONFIG.auth.pass) {
-    console.error('邮件未配置，请在 .env 文件中设置 SMTP_USER 和 SMTP_PASS');
+  // 检查配置
+  if (!RESEND_API_KEY) {
+    console.error('Resend API Key 未配置，请在 .env 文件中设置 RESEND_API_KEY');
     return { success: false, message: '邮件服务未配置' };
   }
 
@@ -39,30 +30,33 @@ export async function sendVerificationCode(email: string): Promise<{ success: bo
   // 存储验证码
   verificationCodes.set(email, { code, expires });
 
-  // 邮件内容
-  const mailOptions = {
-    from: `"Inkflow" <${EMAIL_CONFIG.auth.user}>`,
-    to: email,
-    subject: 'Inkflow 邮箱验证码',
-    html: `
-      <div style="font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px;">
-        <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #333;">Inkflow 邮箱验证</h2>
-        </div>
-        <div style="background: #f5f5f5; border-radius: 8px; padding: 20px; text-align: center;">
-          <p style="color: #666; margin-bottom: 10px;">您的验证码是：</p>
-          <h1 style="color: #333; font-size: 32px; letter-spacing: 8px; margin: 0;">${code}</h1>
-          <p style="color: #999; font-size: 12px; margin-top: 15px;">验证码 5 分钟内有效，请勿泄露给他人</p>
-        </div>
-        <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
-          <p>如非本人操作，请忽略此邮件</p>
-        </div>
-      </div>
-    `,
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Inkflow 邮箱验证码',
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div style="width: 48px; height: 48px; background: #171717; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+              <svg width="24" height="24" viewBox="0 0 48 46" fill="none">
+                <path d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" fill="white"/>
+              </svg>
+            </div>
+            <h2 style="color: #1a1a1a; font-size: 20px; font-weight: 600; margin: 0;">邮箱验证</h2>
+          </div>
+          <div style="background: #f5f5f5; border-radius: 12px; padding: 24px; text-align: center;">
+            <p style="color: #666; font-size: 14px; margin: 0 0 12px;">您的验证码是：</p>
+            <h1 style="color: #1a1a1a; font-size: 36px; font-weight: 700; letter-spacing: 8px; margin: 0; font-family: monospace;">${code}</h1>
+            <p style="color: #999; font-size: 12px; margin: 16px 0 0;">验证码 5 分钟内有效，请勿泄露给他人</p>
+          </div>
+          <div style="text-align: center; margin-top: 24px; color: #999; font-size: 12px;">
+            <p>如非本人操作，请忽略此邮件</p>
+          </div>
+        </div>
+      `,
+    });
+
     return { success: true, message: '验证码已发送' };
   } catch (error) {
     console.error('发送邮件失败:', error);
