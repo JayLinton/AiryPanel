@@ -1,0 +1,619 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 浅色主题 - 更高级的配色 */
+  --page-bg: #fafafa;
+  --editor-bg: #ffffff;
+  --sidebar-bg: #f5f5f4;
+  --hover-bg: #ebebea;
+  --active-bg: #e3e3e1;
+  --text-primary: #1a1a1a;
+  --text-secondary: #3d3d3d;
+  --text-tertiary: #525252;
+  --text-muted: #737373;
+  --accent: #171717;
+  --accent-light: rgba(23, 23, 23, 0.08);
+  --accent-ring: rgba(23, 23, 23, 0.2);
+  --border: #e5e5e5;
+  --divider: #e5e5e5;
+  --code-bg: #f5f5f4;
+  --quote-border: #d4d4d4;
+  --quote-bg: #f9f9f8;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+  --selection-bg: rgba(23, 23, 23, 0.1);
+  --glass-bg: rgba(250, 250, 250, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  /* 深色主题 - 更高级的配色 */
+  --page-bg: #0a0a0a;
+  --editor-bg: #111111;
+  --sidebar-bg: #141414;
+  --hover-bg: #1f1f1f;
+  --active-bg: #262626;
+  --text-primary: #f5f5f5;
+  --text-secondary: #d4d4d4;
+  --text-tertiary: #a3a3a3;
+  --text-muted: #525252;
+  --accent: #e5e5e5;
+  --accent-light: rgba(229, 229, 229, 0.1);
+  --accent-ring: rgba(229, 229, 229, 0.2);
+  --border: #262626;
+  --divider: #262626;
+  --code-bg: #1a1a1a;
+  --quote-border: #333333;
+  --quote-bg: #161616;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+  --selection-bg: rgba(229, 229, 229, 0.15);
+  --glass-bg: rgba(10, 10, 10, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--text-primary);
+  background-color: var(--page-bg);
+  line-height: 1.6;
+}
+
+/* 滚动条样式 - 淡化处理 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+:hover > ::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* 内容区滚动条始终淡化 */
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.overflow-y-auto:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.dark .overflow-y-auto:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 选中文本颜色 */
+::selection {
+  background-color: var(--selection-bg);
+}
+
+/* ===== TipTap 编辑器样式 ===== */
+.tiptap {
+  outline: none !important;
+  min-height: 400px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.tiptap:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap .ProseMirror {
+  outline: none !important;
+}
+
+.tiptap .ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap > * + * {
+  margin-top: 0;
+}
+
+/* 段落 */
+.tiptap p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* 标题层级 */
+.tiptap h1 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.tiptap h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.tiptap h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+/* 引用块 */
+.tiptap blockquote {
+  border-left: 3px solid var(--accent);
+  background-color: var(--quote-bg);
+  padding: 12px 16px;
+  margin: 16px 0;
+  border-radius: 0 4px 4px 0;
+  color: var(--text-secondary);
+}
+
+.tiptap blockquote p {
+  margin-bottom: 0;
+}
+
+/* 代码块 */
+.tiptap pre {
+  background-color: var(--code-bg);
+  padding: 16px 20px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* 代码块语言标签 */
+.tiptap pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.tiptap code {
+  background-color: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+  color: var(--text-primary);
+}
+
+.tiptap pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* 列表 */
+.tiptap ul,
+.tiptap ol {
+  padding-left: 24px;
+  margin: 8px 0;
+}
+
+.tiptap ul {
+  list-style-type: disc;
+}
+
+.tiptap ol {
+  list-style-type: decimal;
+}
+
+.tiptap li {
+  margin-bottom: 4px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.tiptap li p {
+  margin-bottom: 0;
+}
+
+.tiptap li::marker {
+  color: var(--text-muted);
+}
+
+/* 分隔线 */
+.tiptap hr {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: 32px 0;
+  position: relative;
+}
+
+.tiptap hr::before {
+  content: '• • •';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--page-bg);
+  padding: 0 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+  letter-spacing: 0.5em;
+}
+
+/* 强调 */
+.tiptap strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tiptap em {
+  font-style: italic;
+}
+
+/* 链接 */
+.tiptap a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.tiptap a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--text-tertiary);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-style: italic;
+}
+
+/* 高亮 */
+.tiptap mark {
+  background-color: #fef3c7;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.dark .tiptap mark {
+  background-color: #92400e;
+  color: #fef3c7;
+}
+
+/* 任务列表 */
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.tiptap ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tiptap ul[data-type="taskList"] li > label {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.tiptap ul[data-type="taskList"] li > label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.tiptap ul[data-type="taskList"] li > div {
+  flex: 1;
+}
+
+.tiptap ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+/* 图片样式 */
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 16px 0;
+  transition: box-shadow 0.2s ease;
+}
+
+.tiptap img:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tiptap img.ProseMirror-selectednode {
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+/* 下划线/删除线 */
+.tiptap u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tiptap s {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+/* 双链样式 */
+.wiki-link {
+  color: var(--accent);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  font-weight: 500;
+  transition: border-color 0.2s ease;
+}
+
+.wiki-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* 语法高亮颜色 */
+.hljs-comment,
+.hljs-quote {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #569cd6;
+}
+
+.hljs-number,
+.hljs-string,
+.hljs-meta .hljs-meta-string,
+.hljs-literal,
+.hljs-doctag,
+.hljs-regexp {
+  color: #ce9178;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #dcdcaa;
+}
+
+.hljs-attribute,
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type {
+  color: #4ec9b0;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link {
+  color: #d7ba7d;
+}
+
+.hljs-built_in,
+.hljs-deletion {
+  color: #ce9178;
+}
+
+.hljs-formula {
+  background-color: var(--code-bg);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* ===== 通用组件样式 ===== */
+
+/* 毛玻璃效果 */
+.glass-effect {
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 250, 250, 0.85),
+    rgba(250, 250, 250, 0.75)
+  );
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.dark .glass-effect {
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 17, 17, 0.85),
+    rgba(17, 17, 17, 0.75)
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* 输入框聚焦环 - 只对搜索框和普通输入框生效 */
+input:not([class*="outline-none"]):focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-ring);
+}
+
+/* 按钮点击效果 */
+button {
+  transition: all 150ms ease;
+}
+
+button:hover {
+  background-color: var(--hover-bg);
+}
+
+button:active {
+  transform: scale(0.97);
+  transition-duration: 100ms;
+}
+
+/* Tooltip 样式 */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1f2937;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== 数学公式样式 ===== */
+.tiptap .Tiptap-mathematics-editor {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 14px;
+}
+
+.tiptap .Tiptap-mathematics-render {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tiptap .Tiptap-mathematics-render:hover {
+  background: var(--hover-bg);
+  border-radius: 4px;
+}
+
+/* KaTeX 样式调整 */
+.tiptap .katex {
+  font-size: 1.1em;
+}
+
+.tiptap .katex-display {
+  margin: 16px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ===== 专注模式样式 ===== */
+.focus-mode-editor .tiptap {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.focus-mode-editor .tiptap p {
+  margin-bottom: 12px;
+}
+
+.focus-mode-editor .tiptap h1 {
+  font-size: 36px;
+  margin-top: 48px;
+  margin-bottom: 24px;
+}
+
+.focus-mode-editor .tiptap h2 {
+  font-size: 28px;
+  margin-top: 36px;
+  margin-bottom: 18px;
+}
+
+.focus-mode-editor .tiptap h3 {
+  font-size: 22px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
