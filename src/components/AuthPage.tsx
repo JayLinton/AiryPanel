@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { authAPI, setToken, type User } from '@/api/client';
 
 interface AuthPageProps {
@@ -10,9 +10,46 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [codeCountdown, setCodeCountdown] = useState(0);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // 发送验证码
+  const handleSendCode = async () => {
+    if (!email.trim()) {
+      setError('请输入邮箱地址');
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
+    try {
+      await authAPI.sendCode(email);
+      setCodeCountdown(60);
+
+      // 开始倒计时
+      countdownRef.current = setInterval(() => {
+        setCodeCountdown((prev) => {
+          if (prev <= 1) {
+            if (countdownRef.current) {
+              clearInterval(countdownRef.current);
+            }
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '发送验证码失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 提交表单
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -28,7 +65,12 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
           setLoading(false);
           return;
         }
-        response = await authAPI.register(username, email, password);
+        if (!code.trim()) {
+          setError('请输入验证码');
+          setLoading(false);
+          return;
+        }
+        response = await authAPI.register(username, email, password, code);
       }
 
       setToken(response.token);
@@ -37,6 +79,16 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
       setError(err instanceof Error ? err.message : '操作失败');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 切换登录/注册时重置状态
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError('');
+    setCodeCountdown(0);
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
     }
   };
 
@@ -94,6 +146,34 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
               />
             </div>
 
+            {/* 验证码（仅注册） */}
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                  验证码
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="输入6位验证码"
+                    maxLength={6}
+                    className="flex-1 px-4 py-2.5 text-sm border border-border rounded-lg outline-none focus:ring-2 focus:ring-accent-ring transition-all"
+                    style={{ backgroundColor: 'var(--hover-bg)' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSendCode}
+                    disabled={loading || codeCountdown > 0}
+                    className="px-4 py-2.5 text-sm font-medium text-accent bg-accent-light hover:bg-accent/20 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  >
+                    {codeCountdown > 0 ? `${codeCountdown}s` : '发送验证码'}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* 密码 */}
             <div>
               <label className="block text-sm font-medium text-text-secondary mb-1.5">
@@ -131,10 +211,7 @@ export default function AuthPage({ onLogin }: AuthPageProps) {
           {/* 切换登录/注册 */}
           <div className="mt-6 text-center">
             <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError('');
-              }}
+              onClick={toggleMode}
               className="text-sm text-text-muted hover:text-accent transition-colors"
             >
               {isLogin ? '没有账号？点击注册' : '已有账号？点击登录'}

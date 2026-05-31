@@ -72,10 +72,24 @@ export interface AuthResponse {
 }
 
 export const authAPI = {
-  register(username: string, email: string, password: string) {
+  sendCode(email: string) {
+    return request<{ message: string }>('/auth/send-code', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  verifyCode(email: string, code: string) {
+    return request<{ valid: boolean; message: string }>('/auth/verify-code', {
+      method: 'POST',
+      body: JSON.stringify({ email, code }),
+    });
+  },
+
+  register(username: string, email: string, password: string, code: string) {
     return request<AuthResponse>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, code }),
     });
   },
 

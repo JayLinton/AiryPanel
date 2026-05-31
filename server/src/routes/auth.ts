@@ -3,20 +3,86 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { db, type Note } from '../db/database.js';
 import { generateToken, authMiddleware, AuthRequest } from '../middleware/auth.js';
+import { sendVerificationCode, verifyCode } from '../utils/email.js';
 
 const router = Router();
+
+// 发送验证码
+router.post('/send-code', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: '请输入邮箱地址' });
+    }
+
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: '邮箱格式不正确' });
+    }
+
+    await db.read();
+
+    // 检查邮箱是否已注册
+    const existingUser = db.data.users.find(u => u.email === email);
+    if (existingUser) {
+      return res.status(400).json({ error: '该邮箱已注册' });
+    }
+
+    // 发送验证码
+    const result = await sendVerificationCode(email);
+
+    if (result.success) {
+      res.json({ message: result.message });
+    } else {
+      res.status(500).json({ error: result.message });
+    }
+  } catch (error) {
+    console.error('发送验证码失败:', error);
+    res.status(500).json({ error: '发送验证码失败' });
+  }
+});
+
+// 验证验证码
+router.post('/verify-code', async (req: Request, res: Response) => {
+  try {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({ error: '请输入邮箱和验证码' });
+    }
+
+    const result = verifyCode(email, code);
+
+    if (result.valid) {
+      res.json({ valid: true, message: result.message });
+    } else {
+      res.status(400).json({ valid: false, error: result.message });
+    }
+  } catch (error) {
+    console.error('验证验证码失败:', error);
+    res.status(500).json({ error: '验证失败' });
+  }
+});
 
 // 注册
 router.post('/register', async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, code } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !code) {
       return res.status(400).json({ error: '请填写完整信息' });
     }
 
     if (password.length < 6) {
       return res.status(400).json({ error: '密码至少6位' });
+    }
+
+    // 验证验证码
+    const codeResult = verifyCode(email, code);
+    if (!codeResult.valid) {
+      return res.status(400).json({ error: codeResult.message });
     }
 
     await db.read();
