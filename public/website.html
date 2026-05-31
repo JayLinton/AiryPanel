@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inkflow - 优雅的本地笔记应用</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #1a1a1a;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 0;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 100px 0 80px;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 20px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Features */
+    .features {
+      background: white;
+      border-radius: 24px;
+      padding: 80px 48px;
+      margin: -40px auto 80px;
+      max-width: 1000px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 60px;
+      color: #1a1a1a;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .feature-item {
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .feature-item h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+
+    .feature-item p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Screenshots */
+    .screenshots {
+      text-align: center;
+      padding: 80px 0;
+      color: white;
+    }
+
+    .screenshots h2 {
+      font-size: 36px;
+      margin-bottom: 60px;
+    }
+
+    .screenshot-container {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    }
+
+    .screenshot-placeholder {
+      background: #f5f5f5;
+      border-radius: 8px;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 18px;
+    }
+
+    /* Download Section */
+    .download-section {
+      text-align: center;
+      padding: 80px 0;
+      color: white;
+    }
+
+    .download-section h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .download-section p {
+      font-size: 18px;
+      opacity: 0.9;
+      margin-bottom: 48px;
+    }
+
+    .download-cards {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .download-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 32px;
+      min-width: 200px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .download-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .download-card .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .download-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .download-card .size {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .download-card .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 24px;
+      font-size: 14px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .features {
+        padding: 40px 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .download-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .download-card {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav class="nav">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4h16v2H4V4zm0 7h16v2H4v-2zm0 7h16v2H4v-2z" fill="#667eea"/>
+              <circle cx="8" cy="8" r="2" fill="#667eea"/>
+              <circle cx="16" cy="16" r="2" fill="#667eea"/>
+            </svg>
+          </div>
+          Inkflow
+        </a>
+        <div class="nav-links">
+          <a href="#features">功能</a>
+          <a href="#download">下载</a>
+          <a href="https://github.com/JayLinton/Inkflow" target="_blank">GitHub</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>优雅的本地笔记应用</h1>
+      <p>专注于纯粹的写作体验，本地存储，隐私至上。支持富文本编辑、双链引用、数学公式、专注模式等功能。</p>
+      <div class="download-buttons">
+        <a href="#download" class="btn btn-primary">
+          ⬇ 下载 Inkflow
+        </a>
+        <a href="https://inkflow-lemon.vercel.app" class="btn btn-secondary" target="_blank">
+          🌐 在线体验
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2>核心功能</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">📝</div>
+        <h3>富文本编辑</h3>
+        <p>支持标题、列表、代码块、图片、链接等丰富的格式，让写作更自由。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔗</div>
+        <h3>双链引用</h3>
+        <p>使用 [[文档标题]] 语法创建文档间的关联，构建你的知识网络。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📐</div>
+        <h3>数学公式</h3>
+        <p>支持 LaTeX 语法，轻松插入数学公式和方程式。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📋</div>
+        <h3>笔记模板</h3>
+        <p>提供日记、会议记录、待办清单等多种模板，快速开始写作。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🎯</div>
+        <h3>专注模式</h3>
+        <p>全屏无干扰写作，打字机模式让视线始终保持在当前行。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <h3>数据统计</h3>
+        <p>查看写作字数、文档数量、贡献图等统计数据，记录你的创作历程。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🏷️</div>
+        <h3>标签管理</h3>
+        <p>为文档添加标签，快速筛选和组织你的笔记。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌓</div>
+        <h3>深色模式</h3>
+        <p>支持浅色和深色主题，保护你的眼睛。</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💾</div>
+        <h3>本地存储</h3>
+        <p>数据保存在你的设备上，无需联网，隐私至上。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="download-section" id="download">
+    <h2>下载安装</h2>
+    <p>选择你的平台，开始使用 Inkflow</p>
+    <div class="download-cards">
+      <div class="download-card">
+        <div class="icon">🪟</div>
+        <h3>Windows</h3>
+        <div class="size">v0.1.0 · 约 80MB</div>
+        <a href="https://github.com/JayLinton/Inkflow/releases/latest" class="btn btn-primary" target="_blank">
+          下载 exe 安装包
+        </a>
+      </div>
+      <div class="download-card">
+        <div class="icon">🍎</div>
+        <h3>macOS</h3>
+        <div class="size">v0.1.0 · 约 90MB</div>
+        <a href="https://github.com/JayLinton/Inkflow/releases/latest" class="btn btn-primary" target="_blank">
+          下载 dmg 安装包
+        </a>
+      </div>
+      <div class="download-card">
+        <div class="icon">🐧</div>
+        <h3>Linux</h3>
+        <div class="size">v0.1.0 · 约 85MB</div>
+        <a href="https://github.com/JayLinton/Inkflow/releases/latest" class="btn btn-primary" target="_blank">
+          下载 AppImage
+        </a>
+      </div>
+      <div class="download-card">
+        <div class="icon">🌐</div>
+        <h3>网页版</h3>
+        <div class="size">无需安装</div>
+        <a href="https://inkflow-lemon.vercel.app" class="btn btn-secondary" target="_blank">
+          在线使用
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Inkflow. 用 ❤️ 构建 | <a href="https://github.com/JayLinton/Inkflow" target="_blank">GitHub</a></p>
+    </div>
+  </footer>
+</body>
+</html>

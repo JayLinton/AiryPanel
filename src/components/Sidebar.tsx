@@ -735,7 +735,7 @@ export default function Sidebar() {
         </button>
 
         <button
-          onClick={() => setShowInstallGuide(true)}
+          onClick={() => window.open('/website.html', '_blank')}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-text-muted hover:text-text-tertiary hover:bg-hover-bg rounded-lg transition-all duration-200"
         >
           <Download size={15} />
