@@ -61,5 +61,8 @@ coverage
 
 .vercel
 
+# Local sync script (contains server IP)
+sync-local.bat
+
 # Electron build output
 release

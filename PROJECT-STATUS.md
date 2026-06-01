@@ -10,9 +10,8 @@
 
 - **项目名称**: Inkflow - 云端笔记应用
 - **技术栈**: React 18 + TypeScript + Vite / Node.js + Express + lowdb
-- **在线地址**: http://124.220.174.240
+- **在线地址**: https://inkflow.7rees.xyz
 - **GitHub**: https://github.com/JayLinton/Inkflow.git
-- **服务器**: 124.220.174.240 (root)
 
 ---
 
@@ -40,7 +39,7 @@
 - ✅ SSH 免密登录
 
 ### 4. 一键同步脚本
-- ✅ `sync.bat` - 同步代码到服务器（上传到 `/var/www/inkflow/dist/`）
+- ✅ `sync.bat` - 同步代码到服务器
 
 ---
 
@@ -56,7 +55,6 @@
 ## ⏳ 待办事项
 
 - [ ] 配置 SSL 证书 (HTTPS)
-- [ ] 配置域名
 - [ ] 优化前端 UI/UX
 - [ ] 时间轴内容支持在编辑器中渲染（Markdown → TipTap）
 - [ ] 图片粘贴上传功能
@@ -66,14 +64,14 @@
 ## 🔧 常用命令
 
 ```bash
-# 查看服务器状态
-ssh root@124.220.174.240 "pm2 status"
+# 查看服务器状态（使用你的服务器地址）
+ssh root@your-server "pm2 status"
 
 # 查看日志
-ssh root@124.220.174.240 "pm2 logs inkflow"
+ssh root@your-server "pm2 logs inkflow"
 
 # 重启服务
-ssh root@124.220.174.240 "pm2 restart inkflow"
+ssh root@your-server "pm2 restart inkflow"
 
 # 同步代码
 双击 sync.bat
@@ -106,14 +104,6 @@ server/.env                        # 环境变量
 sync.bat                           # 一键同步脚本
 ecosystem.config.cjs               # PM2 配置
 ```
-
----
-
-## 🎯 下次启动时
-
-1. 检查服务器: `ssh root@124.220.174.240 "pm2 status"`
-2. 测试功能: 访问 http://124.220.174.240
-3. 如需同步: 运行 `sync.bat`
 
 ---
 

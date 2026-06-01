@@ -7,10 +7,10 @@
 ### 快速摘要
 
 - **项目**: Inkflow 云端笔记应用
-- **服务器**: http://124.220.174.240 (PM2 + Nginx)
+- **服务器**: https://inkflow.7rees.xyz (PM2 + Nginx)
 - **最新功能**: 邮箱验证码注册 (Nodemailer + QQ 邮箱 SMTP)
 - **同步代码**: 运行 `sync.bat`
-- **查看状态**: `ssh root@124.220.174.240 "pm2 status"`
+- **查看状态**: `ssh root@your-server "pm2 status"`
 
 ### 重要文件
 

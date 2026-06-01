@@ -6,7 +6,7 @@ echo    Inkflow Sync Tool
 echo ========================================
 echo.
 
-set SERVER_IP=124.220.174.240
+set SERVER_IP=your-server-ip
 set SERVER_USER=root
 
 echo [1/4] Building frontend...

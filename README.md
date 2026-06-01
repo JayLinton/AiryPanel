@@ -2,7 +2,7 @@
 
 一个优雅的云端笔记应用，专注于纯粹的写作体验。
 
-**🌐 在线体验：** http://124.220.174.240
+**🌐 在线体验：** https://inkflow.7rees.xyz
 
 ---
 
@@ -81,7 +81,7 @@
 
 ### 在线使用（推荐）
 
-直接访问 http://124.220.174.240 即可使用。
+直接访问 https://inkflow.7rees.xyz 即可使用。
 
 ### 本地开发
 
@@ -130,12 +130,12 @@ vercel --prod
 
 ```bash
 # 上传代码到服务器
-scp -r dist server root@your-ip:/var/www/inkflow/
+scp -r dist server root@your-server:/var/www/inkflow/
 
 # 在服务器上执行
 cd /var/www/inkflow/server
 npm install
-pm2 start npx --name inkflow -- tsx src/index.ts
+pm2 start ecosystem.config.cjs
 ```
 
 详细部署文档请参考 [DEPLOYMENT.md](DEPLOYMENT.md)
