@@ -40,6 +40,7 @@ import { notesAPI } from '@/api/client';
 import TitleInput from './TitleInput';
 import DocToolbar from './DocToolbar';
 import TagInput from './TagInput';
+import { InspirationFab } from './InspirationFab';
 import ErrorBanner from './ErrorBanner';
 import BlockMenu from './BlockMenu';
 
@@ -185,7 +186,14 @@ export default function Editor() {
       TextStyle,
       Color,
     ],
-    content: currentDoc?.content ? JSON.parse(currentDoc.content) : '',
+    content: currentDoc?.content ? (() => {
+      try {
+        return JSON.parse(currentDoc.content);
+      } catch {
+        // 非 JSON 内容（如纯 Markdown），返回空文档
+        return { type: 'doc', content: [{ type: 'paragraph' }] };
+      }
+    })() : '',
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
       debouncedSave(JSON.stringify(json));
@@ -307,8 +315,13 @@ export default function Editor() {
   // 切换文档时更新编辑器内容
   useEffect(() => {
     if (editor && currentDoc) {
-      const content = currentDoc.content ? JSON.parse(currentDoc.content) : '';
-      editor.commands.setContent(content);
+      try {
+        const content = currentDoc.content ? JSON.parse(currentDoc.content) : '';
+        editor.commands.setContent(content);
+      } catch {
+        // 非 JSON 内容，设置空文档
+        editor.commands.setContent({ type: 'doc', content: [{ type: 'paragraph' }] });
+      }
     }
   }, [currentDoc?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -639,7 +652,7 @@ export default function Editor() {
       {/* 主内容区：编辑器 + 大纲 */}
       <div className="flex-1 flex overflow-hidden">
         {/* 编辑区 */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="relative flex-1 overflow-y-auto">
           <div className="max-w-[1000px] mx-auto py-12 px-[min(48px,4vw)]">
             {/* 标题 */}
             <TitleInput />
@@ -674,6 +687,13 @@ export default function Editor() {
 
             {/* 底部留白 */}
             <div className="h-60" />
+          </div>
+
+          {/* 灵感捕获按钮 */}
+          <div className="sticky bottom-6 flex justify-end pr-6 pointer-events-none">
+            <div className="pointer-events-auto">
+              <InspirationFab />
+            </div>
           </div>
         </div>
 

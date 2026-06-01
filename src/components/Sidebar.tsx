@@ -16,6 +16,7 @@ import {
   Info,
   BarChart3,
   LogOut,
+  Zap,
 } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { notesAPI } from '@/api/client';
@@ -24,13 +25,14 @@ import TemplatePicker from './TemplatePicker';
 import StatsPanel from './StatsPanel';
 import InstallGuide from './InstallGuide';
 import { countReferences } from '@/utils/references';
+import { isTimelineNote } from '@/utils/timeline';
 import type { Template } from '@/types';
 
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 350;
 const DEFAULT_WIDTH = 260;
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate, onSelectDoc }: { onNavigate?: (path: string) => void; onSelectDoc?: (id: string) => void } = {}) {
   const {
     state,
     dispatch,
@@ -146,9 +148,9 @@ export default function Sidebar() {
     return counts;
   }, [state.documents]);
 
-  // 活跃文档（未删除）
+  // 活跃文档（未删除，排除时间轴笔记）
   const activeDocs = useMemo(() => {
-    return state.documents.filter((doc) => !doc.deletedAt);
+    return state.documents.filter((doc) => !doc.deletedAt && !isTimelineNote(doc.title));
   }, [state.documents]);
 
   // 收藏文档（最多 5 个）
@@ -321,6 +323,7 @@ export default function Sidebar() {
   function handleSelectDoc(id: string) {
     dispatch({ type: 'SET_CURRENT_DOC', payload: id });
     updateAccessTime(id);
+    onSelectDoc?.(id);
   }
 
   // 格式化时间
@@ -836,6 +839,19 @@ export default function Sidebar() {
       {/* 标签筛选 */}
       {!state.showTrash && <TagFilter />}
 
+      {/* 灵感入口 */}
+      {!state.showTrash && (
+        <div className="px-3 pb-1">
+          <button
+            onClick={() => onNavigate?.('/timeline')}
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-text-tertiary hover:text-text-secondary hover:bg-hover-bg rounded-lg transition-colors duration-150"
+          >
+            <Zap size={15} />
+            灵感
+          </button>
+        </div>
+      )}
+
       {/* 底部操作区 */}
       <div className="p-3 border-t border-border space-y-1.5">
         <button
@@ -898,7 +914,7 @@ export default function Sidebar() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-text-tertiary">版本</span>
-                  <span className="text-text-secondary font-medium">1.0.0</span>
+                  <span className="text-text-secondary font-medium">0.3.6</span>
                 </div>
               </div>
 

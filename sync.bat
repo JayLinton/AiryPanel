@@ -19,25 +19,29 @@ if errorlevel 1 (
 echo [OK] Frontend built
 echo.
 
-echo [2/4] Committing to Git...
-git add .
-git commit -m "sync: update %date% %time%"
-git push origin master
-if errorlevel 1 (
-    echo [!] Git push failed (maybe no changes), continuing...
-)
-echo [OK] Git updated
-echo.
+echo [2/4] Syncing to server...
 
-echo [3/4] Syncing to server...
-scp -r dist/* %SERVER_USER%@%SERVER_IP%:/var/www/inkflow/
-scp -r server/src server/package.json server/package-lock.json server/ecosystem.config.js %SERVER_USER%@%SERVER_IP%:/var/www/inkflow/server/
+:: Upload frontend
+scp -r dist/* %SERVER_USER%@%SERVER_IP%:/var/www/inkflow/dist/
+
+:: Upload backend source
+scp -r server/src server/package.json server/package-lock.json server/tsconfig.json server/ecosystem.config.js %SERVER_USER%@%SERVER_IP%:/var/www/inkflow/server/
+
 echo [OK] Files uploaded
 echo.
 
-echo [4/4] Restarting server...
-ssh %SERVER_USER%@%SERVER_IP% "cd /var/www/inkflow && git pull origin master && cd server && npm install --production && npm run build && pm2 restart inkflow"
+echo [3/4] Building backend on server...
+ssh %SERVER_USER%@%SERVER_IP% "cd /var/www/inkflow/server && npm install && npm run build"
+if errorlevel 1 (
+    echo [ERROR] Backend build failed
+    pause
+    exit /b 1
+)
+echo [OK] Backend built
+echo.
 
+echo [4/4] Restarting server...
+ssh %SERVER_USER%@%SERVER_IP% "pm2 restart inkflow"
 if errorlevel 1 (
     echo [ERROR] Server restart failed
     pause

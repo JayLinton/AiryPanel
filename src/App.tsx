@@ -4,16 +4,28 @@ import Sidebar from '@/components/Sidebar';
 import Editor from '@/components/Editor';
 import StatusBar from '@/components/StatusBar';
 import AuthPage from '@/components/AuthPage';
+import { Toast } from '@/components/Toast';
 import { getToken, authAPI, type User } from '@/api/client';
 
 // 懒加载非关键组件
 const ShortcutPanel = lazy(() => import('@/components/ShortcutPanel'));
 const AdminPage = lazy(() => import('@/components/AdminPage'));
+const TimelineView = lazy(() => import('@/components/TimelineView').then(m => ({ default: m.TimelineView })));
 
 function AppContent() {
   const { dispatch, createDocument } = useApp();
   const [isLoaded, setIsLoaded] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(window.location.pathname === '/timeline');
+
+  // 监听路径变化
+  useEffect(() => {
+    function handlePopState() {
+      setShowTimeline(window.location.pathname === '/timeline');
+    }
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // 页面加载动画
   useEffect(() => {
@@ -83,31 +95,61 @@ function AppContent() {
   }, []);
 
   return (
-    <div
-      className={`flex h-screen overflow-hidden transition-opacity duration-200 ${
-        isLoaded ? 'opacity-100' : 'opacity-0'
-      }`}
-      style={{ backgroundColor: 'var(--page-bg)' }}
-    >
-      {/* 侧边栏 */}
-      <Sidebar />
+    <>
+      <div
+        className={`flex h-screen overflow-hidden transition-opacity duration-200 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ backgroundColor: 'var(--page-bg)' }}
+      >
+        {/* 侧边栏 */}
+        <Sidebar
+          onNavigate={(path) => {
+            if (path === '/timeline') {
+              setShowTimeline(true);
+              window.history.pushState({}, '', '/timeline');
+            }
+          }}
+          onSelectDoc={() => {
+            if (showTimeline) {
+              setShowTimeline(false);
+              window.history.pushState({}, '', '/');
+            }
+          }}
+        />
 
-      {/* 主内容区 */}
-      <div className="flex-1 flex flex-col min-w-0" style={{ backgroundColor: 'var(--sidebar-bg)' }}>
-        {/* 编辑器 */}
-        <Editor />
+        {/* 主内容区 */}
+        <div className="flex-1 flex flex-col min-w-0" style={{ backgroundColor: 'var(--sidebar-bg)' }}>
+          {showTimeline ? (
+            <Suspense fallback={
+              <div className="flex-1 flex items-center justify-center">
+                <div className="text-text-tertiary text-sm">加载中...</div>
+              </div>
+            }>
+              <TimelineView onBack={() => {
+                setShowTimeline(false);
+                window.history.pushState({}, '', '/');
+              }} />
+            </Suspense>
+          ) : (
+            <Editor />
+          )}
+        </div>
+
+        {/* 状态栏 - 固定定位 */}
+        <StatusBar />
+
+        {/* 快捷键面板 - 懒加载 */}
+        {showShortcuts && (
+          <Suspense fallback={null}>
+            <ShortcutPanel onClose={() => setShowShortcuts(false)} />
+          </Suspense>
+        )}
       </div>
 
-      {/* 状态栏 - 固定定位 */}
-      <StatusBar />
-
-      {/* 快捷键面板 - 懒加载 */}
-      {showShortcuts && (
-        <Suspense fallback={null}>
-          <ShortcutPanel onClose={() => setShowShortcuts(false)} />
-        </Suspense>
-      )}
-    </div>
+      {/* Toast 通知 */}
+      <Toast />
+    </>
   );
 }
 

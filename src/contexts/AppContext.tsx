@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import type { AppState, AppAction, Theme } from '@/types';
 import { notesAPI, settingsAPI, clearToken, type User } from '@/api/client';
+import { isTimelineNote } from '@/utils/timeline';
 
 // 初始状态
 const initialState: AppState = {
@@ -153,8 +154,10 @@ export function AppProvider({ children, user: _user }: { children: ReactNode; us
 
         dispatch({ type: 'SET_DOCUMENTS', payload: [...docs, ...deletedDocs] });
 
-        if (docs.length > 0) {
-          dispatch({ type: 'SET_CURRENT_DOC', payload: docs[0].id });
+        // 默认选中第一篇非时间轴笔记
+        const nonTimelineDocs = docs.filter(d => !isTimelineNote(d.title));
+        if (nonTimelineDocs.length > 0) {
+          dispatch({ type: 'SET_CURRENT_DOC', payload: nonTimelineDocs[0].id });
         }
       } catch (error) {
         console.error('初始化失败:', error);
