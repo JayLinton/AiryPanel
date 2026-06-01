@@ -61,8 +61,13 @@ coverage
 
 .vercel
 
-# Local sync script (contains server IP)
+# Local / personal files (contain server IP, not for public repo)
+CLAUDE.md
+PROJECT-STATUS.md
+sync.bat
 sync-local.bat
+sync-server.sh
+*.local.bat
 
 # Electron build output
 release
