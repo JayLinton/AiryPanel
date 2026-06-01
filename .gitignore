@@ -67,6 +67,9 @@ PROJECT-STATUS.md
 sync.bat
 sync-local.bat
 sync-server.sh
+setup-ssh.bat
+init-server.bat
+deploy.sh
 *.local.bat
 
 # Electron build output
